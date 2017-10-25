@@ -16,7 +16,7 @@ resources:
     pointer:
       # replace with source code location (e.g. GitHub) where you cloned this
       # sample project.
-      sourceName: aye0aye/demo-app-gke-managed
+      sourceName: aye0aye/demo-app-kubectl
       branch: master
 
   # config for GKE CLI
