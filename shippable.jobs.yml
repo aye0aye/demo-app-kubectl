@@ -21,7 +21,7 @@ jobs:
   - name: deploy_test
     type: runSh
     steps:
-      - IN: ship_voting_app_redis_gitRepo
+      - IN: vote_app_redis_gitRepo
         switch: off
       - IN: gke_cliConfig
       - IN: vote_front_img
@@ -32,7 +32,7 @@ jobs:
       - TASK:
         # Create a Kubernetes deploy spec and service for the test environment for an existing cluster and deploy them
         - script: |
-            pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/kubernetes-manifests
+            pushd $(shipctl get_resource_state "vote_app_redis_gitRepo")/kubernetes-manifests
               export FE_TAG=$(shipctl get_resource_version_name "vote_front_img")
               cp ./ship_vote_all_in_one_redis.yml.template ./release.template.yml
               shipctl post_resource_state "relstate" "FE_TAG" $FE_TAG
