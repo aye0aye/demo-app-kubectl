@@ -4,19 +4,19 @@ jobs:
   - name: build_frontend_image
     type: runSh
     steps:
-      - IN: ship_voting_app_redis_gitRepo
+      - IN: vote_app_redis_gitRepo
       - IN: gke_cliConfig
-      - OUT: front_img
       - TASK:
         # build the ship-vote image and push it to GCR
         - script: |
-            pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/ship-vote
+            pushd $(shipctl get_resource_state "vote_app_redis_gitRepo")/ship-vote
               export IMG_TAG=master.$BUILD_NUMBER
-              export IMG_REF=gcr.io/fair-future-183201/vote:$IMG_TAG
+              export IMG_REF=$VOTE_FRONT_IMG_SOURCENAME:$IMG_TAG
               docker build -t $IMG_REF .
               gcloud docker -- push $IMG_REF
-              shipctl put_resource_state front_img "versionName" "$IMG_TAG"
+              shipctl put_resource_state vote_front_img "versionName" "$IMG_TAG"
             popd
+      - OUT: vote_front_img
 
   - name: deploy_test
     type: runSh
@@ -24,7 +24,7 @@ jobs:
       - IN: ship_voting_app_redis_gitRepo
         switch: off
       - IN: gke_cliConfig
-      - IN: front_img
+      - IN: vote_front_img
       - IN: test_params
       - IN: kube_cluster
       - OUT: relstate
@@ -33,7 +33,7 @@ jobs:
         # Create a Kubernetes deploy spec and service for the test environment for an existing cluster and deploy them
         - script: |
             pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/kubernetes-manifests
-              export FE_TAG=$(shipctl get_resource_version_name "front_img")
+              export FE_TAG=$(shipctl get_resource_version_name "vote_front_img")
               cp ./ship_vote_all_in_one_redis.yml.template ./release.template.yml
               shipctl post_resource_state "relstate" "FE_TAG" $FE_TAG
               shipctl refresh_file_to_out_path ./release.template.yml relstate
