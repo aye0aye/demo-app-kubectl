@@ -1,0 +1,57 @@
+resources:
+# resources for the provision-gke-kubernetes-cluster app
+
+  - name: vote_front_img
+    type: image
+    integration: drship_gcr
+    pointer:
+      sourceName: "gcr.io/fair-future-183201/vote"
+    seed:
+      versionName: "master.1"
+
+  # GitHub repo holding scripts to be used in runsh pipeline job
+  - name: vote_app_redis_gitRepo
+    type: gitRepo
+    integration: dr_github # replace with your GitHub integration name
+    pointer:
+      # replace with source code location (e.g. GitHub) where you cloned this
+      # sample project.
+      sourceName: devops-recipes/ship-voting-app-redis
+      branch: master
+
+  # config for GKE CLI
+  - name: gke_cliConfig
+    type: cliConfig
+    integration: drship_gke
+    pointer:
+      region: us-central1-b
+
+  - name: relstate
+    type: state
+
+  - name: prodstate
+    type: state
+
+  - name: teststate
+    type: state
+
+  - name: test_params
+    type: params
+    version:
+      params:
+        FE_LABEL: "vote-front-test"
+        BE_LABEL: "vote-back-test"
+
+  - name: prod_params
+    type: params
+    version:
+      params:
+        FE_LABEL: "vote-front-prod"
+        BE_LABEL: "vote-back-prod"
+
+  - name: kube_cluster
+    type: cluster
+    integration: drship_gke    #replace with your Kubernetes integration name
+    pointer:
+      sourceName: "vote-cluster"
+      region: us-central1-b
