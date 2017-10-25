@@ -10,7 +10,7 @@ jobs:
         # build the ship-vote image and push it to GCR
         - script: |
             echo $VOTE_APP_REDIS_GITREPO_STATE
-            ls -R $VOTE_APP_REDIS_GITREPO_STATE
+            ls $VOTE_APP_REDIS_GITREPO_STATE
             pushd $VOTE_APP_REDIS_GITREPO_STATE/ship-vote
               export IMG_TAG=master.$BUILD_NUMBER
               export IMG_REF=$VOTE_FRONT_IMG_SOURCENAME:$IMG_TAG
