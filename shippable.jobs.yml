@@ -26,7 +26,7 @@ jobs:
       - IN: gke_cliConfig
       - IN: vote_front_img
       - IN: test_params
-      - IN: kube_cluster
+      - IN: gke_cluster
       - OUT: relstate
       - OUT: teststate
       - TASK:
@@ -42,7 +42,7 @@ jobs:
               shipctl replace ./test_deploy_spec.yml
               shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
 
-              gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
+              gcloud container clusters get-credentials $GKE_CLUSTER_POINTER_SOURCENAME --zone $GKE_CLUSTER_POINTER_REGION
               # delete previous deployments and services
               kubectl delete deployment $FE_LABEL 2>/dev/null || echo ""
               kubectl delete deployment $BE_LABEL 2>/dev/null || echo ""
@@ -60,7 +60,7 @@ jobs:
         switch: off
       - IN: gke_cliConfig
       - IN: prod_params
-      - IN: kube_cluster
+      - IN: gke_cluster
       - IN: relstate
       - OUT: prodstate
       - TASK:
@@ -72,7 +72,7 @@ jobs:
             shipctl replace ./prod_deploy_spec.yml
             shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
 
-            gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
+            gcloud container clusters get-credentials $GKE_CLUSTER_POINTER_SOURCENAME --zone $GKE_CLUSTER_POINTER_REGION
             # delete previous deployments and services
             kubectl delete deployment $FE_LABEL 2>/dev/null || echo ""
             kubectl delete deployment $BE_LABEL 2>/dev/null || echo ""
