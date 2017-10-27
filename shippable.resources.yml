@@ -48,10 +48,3 @@ resources:
       params:
         FE_LABEL: "vote-front-prod-ayeaye"
         BE_LABEL: "vote-back-prod-ayeaye"
-
-  - name: gke_cluster
-    type: cluster
-    integration: drship_gke    #replace with your Kubernetes integration name
-    pointer:
-      sourceName: "shipdemo-cluster"
-      region: us-central1-b
