@@ -53,5 +53,5 @@ resources:
     type: cluster
     integration: drship_gke    #replace with your Kubernetes integration name
     pointer:
-      sourceName: "demo-cluster"
+      sourceName: "shipdemo-cluster"
       region: us-central1-b
